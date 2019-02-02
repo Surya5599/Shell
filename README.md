@@ -67,5 +67,32 @@ Fork(): this is used to create new processes called child processes which runs p
 
 int execvp(const char *file, char *const argv[]): this function takes in a constant character type pointer which points to the filename associated with the file being executed. The array of pointers must be terminated by a NULL pointer. This function is used to replace the current process with a new process while the first process still runs, allowing it to run multiple program to be executed at once.
 
-pid_t waitpid(pid_t pid, int *status, int options): this function takes in the inputs of the pid_t which is the code returned by fork, the status which is returned from the status of the child, the options variable can be used to modify for certain situations and based on that it suspends the parent execvp until the child execvp is completed and executed
+pid_t waitpid(pid_t pid, int *status, int options): this function takes in the inputs of the pid_t which is the code returned by fork, the status which is returned from the status of the child, the options variable can be used to modify for certain situations and based on that it suspends the parent execvp until the child execvp is completed and executed*
+
+The prototype above includes the execution of three functions and runs the command "ls" which shows the files in the current folder, the prototye functions shows the use of wait in the parent process as the waitpid is used if the current pid is parent, which should wait for child process to execute and finish executing. Waitpid helps avoid child zombies and allow for destruction of the child process before parent can execute.
+
+###### Development and Testing RoadMap
+Order of design:
+Main.cpp (main(), print Prompt()) 
+Command( virtual runCmd())
+SingleCommand. (parse(), checkIfExit(), runCmd())
+MultipleCommand (parse(), executeConnect(), runCmd())
+And (and(), runCmd())
+Or(or(), runCmd())
+Semi:(semi(), runCmd())
+Exit (runCmd());
+
+./test: Test file created to test each of the classes: Semi, And, Or, SingleCommand, and MultCommand to make sure that all the classes can work together efficiently if there are various types of commands and connectors in a single user input.
+And - creating a test that has a failing cmd then checking if second command executes which it shouldn't
+Creating a test that has a passing cmd then checking if second executes which it should
+Or - creating a test that has a failing cmd then checking if second command executes which it should
+Creating a test that has a passing cmd then checking if second executes which it shouldn't
+Semi: the outcome of the first shouldnt matter so that no matter what command execute in order.
+Exit: creating test for exiting the prompt which connector class or single argument classes.
+SingleCommand: Testing the cases such as #, or without the #
+
+Division:
+Melanie: SingleCommand, And, Exit
+Surya: MultCommand, Semi, Or
+Melanie and Surya: Main, Command.h
 
