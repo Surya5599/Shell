@@ -90,16 +90,25 @@ Semi:(semi(), runCmd())
 Exit (runCmd());
 
 ./test: Test file created to test each of the classes: Semi, And, Or, SingleCommand, and MultCommand to make sure that all the classes can work together efficiently if there are various types of commands and connectors in a single user input.
-And - creating a test that has a failing cmd then checking if second command executes which it shouldn't
-Creating a test that has a passing cmd then checking if second executes which it should
-Or - creating a test that has a failing cmd then checking if second command executes which it should
-Creating a test that has a passing cmd then checking if second executes which it shouldn't
+
+And - creating a test that has a failing cmd then checking if second command executes which it shouldn't.
+
+Creating a test that has a passing cmd then checking if second executes which it should.
+
+Or - creating a test that has a failing cmd then checking if second command executes which it should.
+
+Creating a test that has a passing cmd then checking if second executes which it shouldn't.
+
 Semi: the outcome of the first shouldnt matter so that no matter what command execute in order.
+
 Exit: creating test for exiting the prompt which connector class or single argument classes.
+
 SingleCommand: Testing the cases such as #, or without the #
 
 Division:
 Melanie: SingleCommand, And, Exit
+
 Surya: MultCommand, Semi, Or
+
 Melanie and Surya: Main, Command.h
 
