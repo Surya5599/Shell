@@ -6,10 +6,10 @@ Surya Singh, SID: 862033627
 ## Introduction
 Create a shell that can (1) print a command prompt, (2) read in a line of commands from standard input, and (3) Execute commands using fork, execvp and waitpid. The command prompt should be able to print a line containing “$” in order to execute and run commands inputted by the user. The prompt should be able to read the line of commands and determine which command the user is referring to and execute in a specific manner.  Execvp command will be used to run the executable from one of the PATH environment variable  locations. In this assignment,we used a composite pattern, which helps in partitioning a group of objects. The inputs are taken in from the user, then through the fork(), execvp(), wait(), we are going to run and execute the commands based on connectors. 
 
-### Diagram
+## Diagram
 ![GitHub Logo](/images/uml.png)
 
-#### Classes
+## Classes
 BASE CLASS:
 
 Command.h: This is that abstract base class that contains virtual functions inherited by the child classes
@@ -26,7 +26,7 @@ Class: And: This class runs with the properties of the “&&” input. If the co
 
 Class Exit: This class will be used to exit out of the commandprompt when the user exits and account for all things that should be taken into account when exiting such as what things to save, as well as what things to destory.
 
-##### Prototypes/Research
+## Prototypes/Research
 ```c++
     #include <iostream>
     #include <unistd.h>
@@ -72,7 +72,7 @@ pid_t waitpid(pid_t pid, int *status, int options): this function takes in the i
 
 The prototype above includes the execution of three functions and runs the command "ls" which shows the files in the current folder, the prototye functions shows the use of wait in the parent process as the waitpid is used if the current pid is parent, which should wait for child process to execute and finish executing. Waitpid helps avoid child zombies and allow for destruction of the child process before parent can execute.
 
-###### Development and Testing RoadMap
+## Development and Testing RoadMap
 Order of design:
 Main.cpp (main(), print Prompt()) 
 Command( virtual runCmd())
