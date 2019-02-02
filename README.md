@@ -72,13 +72,21 @@ The prototype above includes the execution of three functions and runs the comma
 
 ## Development and Testing RoadMap
 Order of design:
+
 Main.cpp (main(), print Prompt()) 
+
 Command( virtual runCmd())
+
 SingleCommand. (parse(), checkIfExit(), runCmd())
+
 MultipleCommand (parse(), executeConnect(), runCmd())
+
 And (and(), runCmd())
+
 Or(or(), runCmd())
+
 Semi:(semi(), runCmd())
+
 Exit (runCmd());
 
 ./test: Test file created to test each of the classes: Semi, And, Or, SingleCommand, and MultCommand to make sure that all the classes can work together efficiently if there are various types of commands and connectors in a single user input.
