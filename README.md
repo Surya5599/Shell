@@ -102,7 +102,7 @@ Creating a test that has a passing cmd then checking if second executes which it
 
 Semi: the outcome of the first shouldnt matter so that no matter what command execute in order.
 
-Exit: creating test for exiting the prompt which connector class or single argument classes.
+Exit: creating test for exiting the prompt which connector class or single argument class calls and testing that it exited properly
 
 SingleCommand: Testing the cases such as #, or without the #
 
