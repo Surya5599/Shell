@@ -63,11 +63,11 @@ Class Exit: This class will be used to exit out of the commandprompt when the us
     }
 ```
 
-Fork(): this is used to create new processes called child processes which runs parallel to the parent process, and is exactly the same. However anything modified in the child process is not modified in the parent process. The fork() returns a process id (-1 if fork is unsuccessful, 0 if the process is a child process, and positive number >0 if the process is a parent process). This process ID can be used to determine which process we want to change things in and run the execvp().
+Fork(): this is used to create new processes called child processes which runs parallel to the parent process, and is exactly the same. However anything modified in the child process is not modified in the parent process. The fork() returns a process id (-1 if fork is unsuccessful, 0 if the process is a child process, and positive number >0 if the process is a parent process).
 
 int execvp(const char *file, char *const argv[]): this function takes in a constant character type pointer which points to the filename associated with the file being executed. The array of pointers must be terminated by a NULL pointer. This function is used to replace the current process with a new process while the first process still runs, allowing it to run multiple program to be executed at once.
 
-pid_t waitpid(pid_t pid, int *status, int options): this function takes in the inputs of the pid_t which is the code returned by fork, the status which is returned from the status of the child, the options variable can be used to modify for certain situations and based on that it suspends the parent execvp until the child execvp is completed and executed.
+pid_t waitpid(pid_t pid, int *status, int options): this function takes in the inputs of the pid_t which is the code returned by fork, the status which is returned from the status of the child, the int options variable. The waitpid call is used in the parent processes, and it suspends the parent processes/execvp or rather keeps it in waiting mode,  until the child execvp is completed and executed.
 
 The prototype above includes the execution of three functions and runs the command "ls" which shows the files in the current folder, the prototye functions shows the use of wait in the parent process as the waitpid is used if the current pid is parent, which should wait for child process to execute and finish executing. Waitpid helps avoid child zombies and allow for destruction of the child process before parent can execute.
 
