@@ -107,9 +107,9 @@ Exit: creating test for exiting the prompt which connector class or single argum
 SingleCommand: Testing the cases such as #, or without the #
 
 Division:
+
 Melanie: SingleCommand, And, Exit
 
 Surya: MultCommand, Semi, Or
 
 Melanie and Surya: Main, Command.h
-
