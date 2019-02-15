@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-#include "Command.hpp"
-#include "singleCommand.cpp"
-#include "multipleCommand.cpp"
+#include "Command.h"
+#include "singleCommand.h"
+#include "multipleCommand.h"
 using namespace std;
 
 string printPrompt(){

@@ -1,7 +1,7 @@
 #ifndef _MULTIPLECOMMAND_H_
 #define _MULTIPLECOMMAND_H_
 
-#include "Command.hpp"
+#include "Command.h"
 
 #include <iostream>
 #include <sstream>
