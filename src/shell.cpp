@@ -1,15 +1,19 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
 #include "Command.h"
-#include "singleCommand.h"
-#include "multipleCommand.h"
+#include "singleCommand.cpp"
+#include "multipleCommand.cpp"
 using namespace std;
 
 string printPrompt(){
     string input;
     cout << "$ ";
     getline(cin, input);
+
     return input;
 } 
 
@@ -71,6 +75,9 @@ bool checkIfSingle(string data){
 int main(){
     string userInput;
     bool multiple = false;
+    
+    
+    
     while(userInput != "exit"){
         userInput = printPrompt();
         for(unsigned i = 0; i < userInput.size(); ++i) {

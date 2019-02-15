@@ -2,7 +2,7 @@
 #define _MULTIPLECOMMAND_H_
 
 #include "Command.h"
-
+#include "singleCommand.h"
 #include <iostream>
 #include <sstream>
 #include <string>

@@ -1,6 +1,9 @@
 #include "singleCommand.h"
 #include <bits/stdc++.h> 
 #include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
+
 using namespace std;
 
     singleCommand::singleCommand(string data){
@@ -29,32 +32,38 @@ using namespace std;
     
     bool singleCommand::runCommand(){
         if(commands.at(0) == "exit"){
+            cout << "YUP " << endl;
                 exit(0);
         }
         char *cmd = &commands.at(0)[0];
         char *argv[commands.size() + 1];
         for(unsigned i = 0; i < commands.size(); ++i){
+            
             argv[i] = &commands.at(i)[0];
         }
         argv[commands.size()] = NULL;
         pid_t pid = fork();
-        
         if (pid == -1)
         {
-            cout << "Fork ERROR" << endl;
+            perror("Fork Error");
         }   
         else if (pid > 0)
         {
             int status;
             waitpid(pid, &status, 0);
-            
+            if(status == -1){
+                return false;
+            }
+            if(status == 0){
+                return true;
+            }
         }  
         else
         {
             if(-1 == execvp(cmd, argv)){
-                    perror("Command Not found");
-                    return false;
-            }
+                perror("Command not found");
+               _exit(-1);
+           }
+           _exit(0);
          }
-         return true;
     }

@@ -1,4 +1,10 @@
 #include "multipleCommand.h"
+#include <bits/stdc++.h> 
+#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
+using namespace std;
+
 
     multipleCommand::multipleCommand(string data) {
         this->data = data;
@@ -134,8 +140,10 @@
                     j = j + 1;
                     lastRun = multCommand.at(j)->runCommand();
                 }
-                else{
+                else if(lastRun == true) {
+                    
                     j = j + 1;
+                    
                 }
             }
             else if(connectors.at(i) == ";"){
