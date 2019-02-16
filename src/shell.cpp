@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Command.h"
-#include "singleCommand.cpp"
-#include "multipleCommand.cpp"
+#include "singleCommand.h"
+#include "multipleCommand.h"
 using namespace std;
 
 string printPrompt(){

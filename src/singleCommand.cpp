@@ -32,7 +32,6 @@ using namespace std;
     
     bool singleCommand::runCommand(){
         if(commands.at(0) == "exit"){
-            cout << "YUP " << endl;
                 exit(0);
         }
         char *cmd = &commands.at(0)[0];
