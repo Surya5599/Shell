@@ -2,12 +2,17 @@
 #include "Command.h"
 #include "singleCommand.h"
 #include "multipleCommand.h"
+#include <sstream>
+
+using namespace std;
 
 TEST(SingleCommandTest, ECHO){   
-    singleCommand* s1 = new singleCommand(":wq love cs");
+    singleCommand* s1 = new singleCommand("echo love cs");
     s1->Parse();
-    s1->runCommand(); 
-
+    testing::internal::CaptureStdout();
+    s1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("love cs\n", output);
 }
 
 
