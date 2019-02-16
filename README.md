@@ -80,6 +80,10 @@ multipleCommand testing: Includes testing of connectors and how they work togeth
 CommentedCommands testing: Includes testing what happens to commands that have comments in middle, beginning or end
 Exit Commands: testing on exit is hard for google test as, once exit is called it exits the googletest therefore, not continuing with any testing after so much more exit testing will be done in bash integration testing
 
+./test will run the unit_tests....if the failing tests are being due to ls, that probably because of an extra directory being created please disregard those errors.
+
+Integration tests include many edge cases for single, multiple, commented, and exit commands. 
+
 Division: //Updated
 
 All files were worked on collabratively, by both Melanie Aguilar and Surya
