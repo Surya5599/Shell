@@ -4,20 +4,14 @@ cd ..
 
 ./rshell << EOF
 echo hello && echo hi
-echo hello || ls
-echo Greeting "hello"
-echo Showing Current Status "status"
-status
-echo Showing files in Current directory
-ls
-echo Create New file in directory "
-echo
-echo Remove file from direcory "rm
-echo
-echo Show existing files in Current Directory "ls"
-echo ls 
-echo Leaving "goodbye"
-goodbye
+echo 1 || echo 2
+echo 1 ; echo 2
+echo 1 && echo 2 || echo 3 ; echo 4
+ls ; mkdir newDir ; ls ; rm -rf newDir ; ls
+echo "hello && goodbye" || echo hello
+echo "hello && goodbye" && echo "hello || goodbye"
+ls -a; echo hello && mkdir newDir || echo world; git status; rm -rf newDir
+echo 1 && echo 2 && echo 3 ; echo 4 ; echo 5; echo 6
 exit
 EOF
 
