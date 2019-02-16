@@ -11,7 +11,7 @@
 using namespace std;
 
 class singleCommand:public Command {
-    protected:
+    private:
     string data;
     vector<string> commands;
   
