@@ -73,7 +73,7 @@ bool checkIfSingle(string data){
 }
 
 int main(){
-    string userInput;
+    string userInput = "";
     bool multiple = false;
     
     
@@ -101,7 +101,7 @@ int main(){
         else{
             multipleExecute(userInput);
         }
-    }
+   }
     if(userInput == "exit"){
             return 0;
     }

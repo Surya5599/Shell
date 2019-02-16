@@ -1,11 +1,24 @@
 #!/bin/sh
 
-source shell.cpp
+cd ..
 
-INPUTS=("echo hello" "ls")
 
-echo "Executing ./c-echo ${INPUTS[0]}"
-./rshell ${INPUTS[0]}
+./rshell << EOF
+echo Showing Current Directories running "ls":
+ls
+echo Making new directory called newDir running "mkdir newDir":
+mkdir newDir
+echo Showing new list of directories running "ls":
+ls
+echo Removing newDir running "rm -rf newDir":
+rm -rf newDir
+echo Showing list of directories running "ls":
+ls
+echo Running invalid command "asfd":
+asdf
+echo exiting using "exit":
+exit
+EOF
 
 
 
