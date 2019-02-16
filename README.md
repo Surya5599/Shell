@@ -6,25 +6,17 @@ Surya Singh, SID: 862033627
 ## Introduction
 Create a shell that can (1) print a command prompt, (2) read in a line of commands from standard input, and (3) Execute commands using fork, execvp and waitpid. The command prompt should be able to print a line containing “$” in order to execute and run commands inputted by the user. The prompt should be able to read the line of commands and determine which command the user is referring to and execute in a specific manner.  Execvp command will be used to run the executable from one of the PATH environment variable  locations. In this assignment,we used a composite pattern, which helps in partitioning a group of objects. The inputs are taken in from the user, then through the fork(), execvp(), wait(), we are going to run and execute the commands based on connectors. 
 
-## Diagram
+## Diagram // UPDATED
 ![GitHub Logo](/images/uml.png)
 
-## Classes
+## Classes // UPDATED
 BASE CLASS:
+Command.h: This is that abstract base class that contains virtual functions inherited by the child classes contains three virtual functions inherited but both children class
 
-Command.h: This is that abstract base class that contains virtual functions inherited by the child classes
+Class: SingleCommand: This class stores the user input as a member variable: string data using a constructor. The Parse() function in this class, looks at that data and checks for the outliers for example, does it have ("#") if it does it checks if the ("#") is within quotes if it is not, it removes everything from the # because all that is considered commencted command. Then it takes the data, and parses it with a deliminator (" ")*space* and stores each word in a vector of strings which is a private member variable. Once that is done, the runCommand() function, checks if the vector has something, if it does it stores those strings into char* based on the excevp inputs and populates the argv[] used by excevp and runs the command.
 
-Class: SingleCommand: This class should use Parse() to read in the input from the user and divide the entire input into single/individual strings. It should then check that each string is valid and also check if the string could be a comment inputted by the user(starting with “#”).
+Class Multiple Commands: This class is called when there is a connector in a string, that means this is a multipleCommand; multiple Command's Parse() function does the same thing for # first then continues on to create objects of singleCommand by parsing each command based on connectors and pushes them into private member variable multCommand which hold reference to the Command the abstract base class. This class also has private memeber variable of strings which holds the connectors in the order they are inputted. Once the runCommand for this class is called. This class runs calls runCommand on every singleCommand object based on the connectors.
 
-Class Multiple Commands: This class does the same as the the SingleCommand class except it accounts for multiple arguments that the user has inputted. This class will be used to construct and join the classes: “Semi”, “And”, and “Or” (these are the connectors). If Parse() detects a connector, then it will go to the class that correspond to that connector and then determine how the commands will be executed.
-
-Class: Semi: This class runs with the properties of a semi colon input which says the second command executes no matter the outcome of the first command.
-
-Class: Or: This class runs with the properties of the “||” input. With this type of connector we will have to utilize the forking method to check if the second argument is able to pass (according to the truth/false value of the preceding argument).
-
-Class: And: This class runs with the properties of the “&&” input. If the command input before the && executes successfully then the command argument after the && also executes but if the command before the && fails, the command after the && does not get executed.
-
-Class Exit: This class will be used to exit out of the commandprompt when the user exits and account for all things that should be taken into account when exiting such as what things to save, as well as what things to destory.
 
 ## Prototypes/Research
 ```c++
@@ -71,45 +63,32 @@ pid_t waitpid(pid_t pid, int *status, int options): this function takes in the i
 
 The prototype above includes the execution of three functions and runs the command "ls" which shows the files in the current folder, the prototye functions shows the use of wait in the parent process as the waitpid is used if the current pid is parent, which should wait for child process to execute and finish executing. Waitpid helps avoid child zombies and allow for destruction of the child process before parent can execute.
 
-## Development and Testing RoadMap
+## Development and Testing RoadMap //UPDATED
 Order of design:
 
-Main.cpp (main(), print Prompt()) 
+Main.cpp (main(), print Prompt(), singleExecute, multipleExecute, checkIfSingle) 
 
-Command( virtual runCmd())
+Command( virtual runCommand(),Virtual Parse(),Virtual findQuotes(int) ,Virtual runCommand())
 
-SingleCommand. (parse(), checkIfExit(), runCmd())
+SingleCommand. (Parse(), findQuotes(int) , runCommand())
 
-MultipleCommand (parse(), executeConnect(), runCmd())
+MultipleCommand (Parse(), findQuotes(int) , runCommand())
 
-And (and(), runCmd())
+Unit_test.cpp: create extensive testing for singleCommands, MultipleCommands, CommentedCommands, ExitCommands
+singleCommands testing: Includes testing of basic commands such as echo, ls , mkdir, and even an invalid command
+multipleCommand testing: Includes testing of connectors and how they work together and sometimes not work together.
+CommentedCommands testing: Includes testing what happens to commands that have comments in middle, beginning or end
+Exit Commands: testing on exit is hard for google test as, once exit is called it exits the googletest therefore, not continuing with any testing after so much more exit testing will be done in bash integration testing
 
-Or(or(), runCmd())
+Division: //Updated
 
-Semi:(semi(), runCmd())
+All files were worked on collabratively, by both Melanie Aguilar and Surya
 
-Exit (runCmd());
+## Challanges Faced and how we solved them //Update
+Challenge one: A problem that occured was that during unit_testing we had to somehow look at the printed outcome of the command being ran, as this was not taught of how to use google test, after some intense research. 
+Using this source https://stackoverflow.com/questions/3803465/how-to-capture-stdout-stderr-with-googletest/33186201
+it was clear as to how we can store a stdout into a string in order to compare to expected output. From this we learned the features of google test and how we can use them in order to create more advanced and elaborative testing.
 
-./test: Test file created to test each of the classes: Semi, And, Or, SingleCommand, and MultCommand to make sure that all the classes can work together efficiently if there are various types of commands and connectors in a single user input.
+Challenge two: Another problem we faced was creating an exit command, as we discovered a bug that exit was not working when there was a command that was invalid executed before it. For example if the user enter a command thats invalid for example "dog" then the code tells them that the command is invalid, then if they enter exit, nothing would happen and it would allow users to enter something again but if exit was entered this second time, it exits! So the bug we discovered was that the code wasn't exiting the child process, after some research we learned that the child only returns back if the command is not found by excevp but if it is it never returns, meaning the child process was returning but it was never getting destroyed and was becoming a zombie process. After making a few edits, we were able to overcome this problem and in return learned something new.
 
-And - creating a test that has a failing cmd then checking if second command executes which it shouldn't.
 
-Creating a test that has a passing cmd then checking if second executes which it should.
-
-Or - creating a test that has a failing cmd then checking if second command executes which it should.
-
-Creating a test that has a passing cmd then checking if second executes which it shouldn't.
-
-Semi: the outcome of the first shouldnt matter so that no matter what command execute in order.
-
-Exit: creating test for exiting the prompt which connector class or single argument class calls and testing that it exited properly
-
-SingleCommand: Testing the cases such as #, or without the #
-
-Division:
-
-Melanie: SingleCommand, And, Exit
-
-Surya: MultCommand, Semi, Or
-
-Melanie and Surya: Main, Command.h
