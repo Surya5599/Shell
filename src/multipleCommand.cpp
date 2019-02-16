@@ -11,7 +11,14 @@ using namespace std;
     }
     
     void multipleCommand::Parse(){
-        int newBegin = 0;
+        int hash = -1;
+        hash = data.find('#');
+        if(hash > -1){
+            if(!findQuotes(hash)){ 
+                data.erase(data.begin() + hash, data.end());
+            }
+        }
+	int newBegin = 0;
         string singleCmd;
         for(unsigned i = 0; i < data.size(); ++i) {
             if(data[i] == ';'){

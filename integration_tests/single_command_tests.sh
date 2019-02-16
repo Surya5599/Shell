@@ -1,4 +1,11 @@
 #!/bin/sh
 
-echo "hello world"
-ls
+source shell.cpp
+
+INPUTS=("echo hello" "ls")
+
+echo "Executing ./c-echo ${INPUTS[0]}"
+./rshell ${INPUTS[0]}
+
+
+
