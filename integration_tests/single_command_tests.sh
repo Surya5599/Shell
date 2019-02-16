@@ -14,8 +14,6 @@ echo Removing newDir running "rm -rf newDir":
 rm -rf newDir
 echo Showing list of directories running "ls":
 ls
-echo Running invalid command "asfd":
-asdf
 echo exiting using "exit":
 exit
 EOF
