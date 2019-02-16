@@ -21,7 +21,7 @@ TEST(SingleCommandTest, LS){
     testing::internal::CaptureStdout();
     s2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(expectedOutput, output);
 
 }
@@ -37,7 +37,7 @@ TEST(SingleCommandTest, MKDIRandRM){
     testing::internal::CaptureStdout();
     s2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnew\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nnew\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(expectedOutput, output);
     singleCommand* s4 = new singleCommand("rm -rf new");
     s4->Parse();
@@ -45,7 +45,7 @@ TEST(SingleCommandTest, MKDIRandRM){
     testing::internal::CaptureStdout();
     s2->runCommand();
     string output2 = testing::internal::GetCapturedStdout();
-    string expectedOutput2 = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput2 = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(expectedOutput2, output2);
 
 }
@@ -69,7 +69,7 @@ TEST(MultipleCommandTest, Mixed1) {
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "hello\nmy && name\nis || mel\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "hello\nmy && name\nis || mel\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(expectedOutput, output);
 }
 
@@ -80,7 +80,7 @@ TEST(MultipleCommandTest, Mixed2) {
      testing::internal::CaptureStdout();
     m2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = ".\n..\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\n.git\n.gitignore\n.gitmodules\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nREADME.md\nrshell\nsrc\ntest\nunit_tests\nhello\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnewDir\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = ".\n..\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\n.git\n.gitignore\n.gitmodules\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\nhello\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nnewDir\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(expectedOutput, output);
     multipleCommand* m6 = new multipleCommand("rm -rf newDir");
     m6->Parse();
@@ -127,7 +127,7 @@ TEST(CommentedCommandTest, Comment2){
     testing::internal::CaptureStdout();
     s1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
     EXPECT_EQ(output, expectedOutput);
 }
 
