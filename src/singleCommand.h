@@ -20,7 +20,7 @@ class singleCommand:public Command {
     singleCommand(string data);
     void Parse();
     bool runCommand();
-    
+    bool findQuotes(int);
 };
 
 #endif

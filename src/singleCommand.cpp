@@ -13,9 +13,11 @@ using namespace std;
         int hash = -1;
         hash = data.find('#');
         if(hash > -1){
-            data.erase(data.begin() + hash, data.end());
+            if(findQuotes(hash) == false){
+                data.erase(data.begin() + hash, data.end());
+            }
         }
-        string sr1;
+	string sr1;
         string sr2;
         int x = -1;
         x = data.find('\"');
@@ -31,7 +33,8 @@ using namespace std;
     }
     
     bool singleCommand::runCommand(){
-        if(commands.at(0) == "exit"){
+      if(commands.size() != 0){ 
+	 if(commands.at(0) == "exit"){
                 exit(0);
         }
         char *cmd = &commands.at(0)[0];
@@ -65,4 +68,27 @@ using namespace std;
            }
            _exit(0);
          }
+       }
+    }
+
+
+
+    bool singleCommand::findQuotes(int loc){
+        int firstPos = -1;
+        int secPos = -1;
+        for(unsigned i = 0; i < data.size(); ++i) {
+            if(data[i] == '\"'){
+                firstPos = i;
+                break;
+            }
+        }
+        for(unsigned j = firstPos; j < data.size(); ++j) {
+                if(data[j] == '\"') {
+                    secPos = j;
+                }
+        }
+        if(loc > firstPos && loc < secPos){
+            return true;
+        }
+        return false;
     }
