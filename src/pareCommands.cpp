@@ -5,6 +5,7 @@ using namespace std;
 
 pareCommands::pareCommands(string data) {
     this->data = data;
+    wrongParenthesis = false;
 }
 
 
