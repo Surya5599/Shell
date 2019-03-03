@@ -73,8 +73,7 @@ using namespace std;
                     singleCommand* s1 = new singleCommand(singleCmd);
                     s1->Parse();
                     multCommand.push_back(s1);
-                }       
-                cout << singleCmd << endl;
+                }      
             }
             else if(data[i] == '&' && data[i+1] == '&') {
                 if(findQuotes(i, newBegin) == true){
@@ -102,7 +101,7 @@ using namespace std;
                     s1->Parse();
                     multCommand.push_back(s1);
                 }  
-                cout << singleCmd << endl;
+                
             }
             
         }
