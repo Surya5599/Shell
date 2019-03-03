@@ -11,6 +11,8 @@ using namespace std;
 
 
 class Command{
+    protected:
+    bool lastRun;
     
     public:
     Command(){};
