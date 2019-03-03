@@ -27,6 +27,9 @@ using namespace std;
                     if(x != -1){
                         i = x + 1;
                         singleCmd = data.substr(newBegin , i - newBegin-1);
+                        if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-1);
+                        }
                         newBegin = i + 1;
                         singleCommand* s1 = new singleCommand(singleCmd);
                         s1->Parse();
@@ -35,13 +38,15 @@ using namespace std;
                 }
                 else{
                     singleCmd = data.substr(newBegin, i - newBegin);
+                    if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-1);
+                        }
                     newBegin = i + 2;
                     connectors.push_back(";");
                     singleCommand* s1 = new singleCommand(singleCmd);
                     s1->Parse();
                     multCommand.push_back(s1);
                 }
-
             }
             else if(data[i] == '|' && data[i+1] == '|') {
                 if(findQuotes(i, newBegin) == true){
@@ -49,6 +54,9 @@ using namespace std;
                     if(x != -1){
                         i = x + 1;
                         singleCmd = data.substr(newBegin , i - newBegin-1);
+                        if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-2);
+                        }
                         newBegin = i + 1;
                         singleCommand* s1 = new singleCommand(singleCmd);
                         s1->Parse();
@@ -57,12 +65,16 @@ using namespace std;
                 }
                 else{
                     singleCmd = data.substr(newBegin, i - newBegin);
+                    if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-1);
+                        }
                     newBegin = i + 3;
                     connectors.push_back("||");
                     singleCommand* s1 = new singleCommand(singleCmd);
                     s1->Parse();
                     multCommand.push_back(s1);
-                }             
+                }       
+                cout << singleCmd << endl;
             }
             else if(data[i] == '&' && data[i+1] == '&') {
                 if(findQuotes(i, newBegin) == true){
@@ -70,6 +82,9 @@ using namespace std;
                     if(x != -1){
                         i = x + 1;
                         singleCmd = data.substr(newBegin , i - newBegin - 1);
+                        if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-2);
+                        }
                         newBegin = i + 1;
                         singleCommand* s1 = new singleCommand(singleCmd);
                         s1->Parse();
@@ -78,13 +93,18 @@ using namespace std;
                 }
                 else{
                     singleCmd = data.substr(newBegin, i - newBegin);
+                    if(singleCmd[0] == ' '){
+                            singleCmd = data.substr(newBegin+1, i - newBegin-2);
+                        }
                     newBegin = i + 3;
                     connectors.push_back("&&");
                     singleCommand* s1 = new singleCommand(singleCmd);
                     s1->Parse();
                     multCommand.push_back(s1);
                 }  
+                cout << singleCmd << endl;
             }
+            
         }
         singleCmd = data.substr(newBegin, data.size());
         if(singleCmd[0] == ' '){
