@@ -18,6 +18,7 @@ ADD_EXECUTABLE(rshell
     ${PROJECT_SOURCE_DIR}/src/shell.cpp
      ${PROJECT_SOURCE_DIR}/src/singleCommand.cpp
      ${PROJECT_SOURCE_DIR}/src/multipleCommand.cpp
+     ${PROJECT_SOURCE_DIR}/src/pareCommands.cpp
 )
 
 
@@ -26,6 +27,8 @@ ADD_EXECUTABLE(test
    ${PROJECT_SOURCE_DIR}/unit_tests/unit_tests.cpp
    ${PROJECT_SOURCE_DIR}/src/singleCommand.cpp
      ${PROJECT_SOURCE_DIR}/src/multipleCommand.cpp
+	${PROJECT_SOURCE_DIR}/src/pareCommands.cpp
+
 )
 TARGET_LINK_LIBRARIES(test gtest)
 TARGET_COMPILE_DEFINITIONS(test PRIVATE gtest_disable_pthreads=ON)

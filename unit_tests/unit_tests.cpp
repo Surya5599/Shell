@@ -2,7 +2,7 @@
 #include "Command.h"
 #include "singleCommand.h"
 #include "multipleCommand.h"
-
+#include "pareCommands.h"
 using namespace std;
 
 TEST(SingleCommandTest, ECHO){   
