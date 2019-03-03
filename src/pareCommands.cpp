@@ -10,10 +10,7 @@ pareCommands::pareCommands(string data) {
 
 
 void pareCommands::Parse() {
-    if(countParenthesis(data) % 2 == 1){
-        wrongParenthesis = true;
-        return;
-    }
+    
     int hash = -1;
         hash = data.find('#');
         if(hash > -1){
@@ -21,6 +18,10 @@ void pareCommands::Parse() {
                 data.erase(data.begin() + hash, data.end());
             }
         }
+    if(countParenthesis(data) % 2 == 1){
+        wrongParenthesis = true;
+        return;
+    }
     int newBegin = 0;
     string foundCmd;
     for(unsigned i = 0; i < data.size(); ++i) {
