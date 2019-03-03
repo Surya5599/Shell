@@ -15,15 +15,14 @@ class multipleCommand:public Command {
     string data;
     vector<Command* > multCommand;
     vector<string> connectors;
-    
-    
+    bool findQuotes(int loc, int newBegin);
+    int findConnectors(int loc, int newBegin);
     
     public:
     multipleCommand(string data);
     void Parse();
     bool runCommand();
-    bool findQuotes(int loc);
-    int findConnectors(int loc);
+
     
 };
 
