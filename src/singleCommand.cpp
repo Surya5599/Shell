@@ -27,7 +27,7 @@ using namespace std;
         hash = data.find('#');
         if(hash > -1){
             if(findQuotes(hash) == false){
-                data.erase(remove(data.begin(), data.end(), '\"'), data.end());
+                data.erase(data.begin()+hash, data.end());
             }
         }
         if(data == " "){
