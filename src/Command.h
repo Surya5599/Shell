@@ -11,14 +11,12 @@ using namespace std;
 
 
 class Command{
-        
-        
+    
     public:
     Command(){};
     virtual bool runCommand() = 0;
     virtual void Parse() = 0;
-    virtual bool findQuotes(int) = 0;
-
+    
 };
 
 #endif
