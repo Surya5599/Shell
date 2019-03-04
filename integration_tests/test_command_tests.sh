@@ -2,7 +2,7 @@
 # tests primarily for the test commands execution
 cd ..
 
-./a.out << EOF
+./rshell << EOF
 test -e src/shell.cpp && echo "shell.cpp is a file/dir"
 test -d src/pareCommands.h && echo "pareCommands.h is a directory" || echo "pareCommands.h is not a directory"
 test -d src && echo "is a dir"
