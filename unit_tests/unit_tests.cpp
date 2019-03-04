@@ -64,12 +64,12 @@ TEST(SingleCommandTest, WrongCommand){
 
 TEST(MultipleCommandTest, Mixed1) {
     
-    multipleCommand* m1 = new multipleCommand("echo hello || ls ; echo \"my && name\" && echo \"is || mel\" && ls");
+    multipleCommand* m1 = new multipleCommand("echo hello || ls ; echo \"my && name\" && echo \"is || mel\" && echo 3");
     m1->Parse();
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "hello\nmy && name\nis || mel\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "hello\nmy && name\nis || mel\n3\n";
     EXPECT_EQ(expectedOutput, output);
 }
 
@@ -101,7 +101,7 @@ TEST(MultipleCommandTest, Mixed3) {
 
 TEST(MultipleCommandTest, Mixed4){
     
-    multipleCommand* m4 = new multipleCommand("echo \"hello\" ; ls || echo \"don't print\"");
+    multipleCommand* m4 = new multipleCommand("echo \"hello ; ls\" || echo \"don't print\"");
     m4->Parse();
     testing::internal::CaptureStdout();
     m4->runCommand();
@@ -168,6 +168,429 @@ TEST(ExitCommandTest, Exit3){
     string output = testing::internal::GetCapturedStdout();
     EXPECT_EQ("hello\n", output);
 }
+
+TEST(PrecedenceTest, Precedence1){
+    string input = "(echo 1 && echo 2) && echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n3\n", output);
+}
+
+TEST(PrecedenceTest, Precedence2){
+    string input = "(echo 1 && echo 2) || echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n", output);
+}
+
+TEST(PrecedenceTest, Precedence3){
+    string input = "(echo 1 || echo 2) || echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n", output);
+}
+
+TEST(PrecedenceTest, Precedence4){
+    string input = "(echo 1 || echo 2) && echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n3\n", output);
+}
+
+TEST(PrecedenceTest, Precedence5){
+    string input = "(echo 1 || echo 2) ; echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n3\n", output);
+}
+
+TEST(PrecedenceTest, Precedence6){
+    string input = "(echo 1 ; echo 2) ; echo 3";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n3\n", output);
+}
+
+TEST(PrecedenceTest, Precedence7){
+    string input = "(echo 1 ; echo 2) ; (echo 3 && echo 4)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n3\n4\n", output);
+}
+
+TEST(PrecedenceTest, Precedence8){
+    string input = "(echo 1 ; echo 2) || (echo 3 && echo 4)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n", output);
+}
+
+TEST(PrecedenceTest, Precedence9){
+    string input = "(echo 1 ; echo 2) || (echo 3)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n2\n", output);
+}
+
+
+TEST(PrecedenceTest, Precedence10){
+    string input = "(echo 1 ; (echo 3 && echo 4))";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n3\n4\n", output);
+}
+
+TEST(PrecedenceTest, Precedence11){
+    string input = "(echo 1 || (echo 3 && echo 4))";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n", output);
+}
+
+TEST(PrecedenceTest, Precedence12){
+    string input = "(echo 1 || (echo 3 && echo 4) && (echo 5 && echo 6))";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("1\n5\n6\n", output);
+}
+
+TEST(PrecedenceTest, Precedence13){
+    string input = "(dog || (echo 3 && echo 4) && (echo 5 && echo 6))";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("3\n4\n5\n6\n", output);
+}
+
+TEST(PrecedenceTest, Precedence14){
+    string input = "(exit && echo 4) && (echo 5 && echo 6)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("5\n6\n", output);
+}
+
+TEST(PrecedenceTest, Precedence15){
+    string input = "(exit && echo 4) || (echo 5 && echo 6)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(PrecedenceTest, Precedence16){
+    string input = "(exit && (echo 5 && echo 6))";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(PrecedenceTest, Precedence17){
+    string input = "(exit && (echo 5 && echo 6)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("Syntax Error: Parenthesis Missing\n", output);
+}
+
+TEST(PrecedenceTest, Precedence18){
+    string input = "(exit && #(echo 5 && echo 6)";
+    pareCommands* p1 = new pareCommands(input);
+    p1->Parse();
+    testing::internal::CaptureStdout();
+    p1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("Syntax Error: Parenthesis Missing\n", output);
+}
+
+
+TEST(TestCommandTest, Test1){
+    string input = "test -e src";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(TestCommandTest, Test2){
+    string input = "test -f src";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+TEST(TestCommandTest, Test3){
+    string input = "test -d src";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(TestCommandTest, Test4){
+    string input = "test src";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(TestCommandTest, Test5){
+    string input = "test -e src/shell.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+TEST(TestCommandTest, Test6){
+    string input = "test -d src/shell.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+TEST(TestCommandTest, Test7){
+    string input = "test -f src/shell.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(TestCommandTest, Test8){
+    string input = "test src/shell.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(TestCommandTest, Test9){
+string input = "test src/shellll.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+
+TEST(TestCommandTest, Test10){
+string input = "test -e src/shellll.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(TestCommandTest, Test11){
+string input = "test -f src/shellll.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(TestCommandTest, Test12){
+string input = "test -d src/shellll.cpp";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest1){
+    string input = "[ -e src ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest2){
+    string input = "[ -f src ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+TEST(SymbolicTestCommandTest, STest3){
+    string input = "[ -d src ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest4){
+    string input = "[ src ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest5){
+    string input = "[ -e src/shell.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+TEST(SymbolicTestCommandTest, STest6){
+    string input = "[ -d src/shell.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest7){
+    string input = "[ -f src/shell.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest8){
+    string input = "[ src/shell.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(TRUE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest9){
+string input = "[ src/shellll.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+
+TEST(SymbolicTestCommandTest, STest10){
+string input = "[ -e src/shellll.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, STest11){
+string input = "[ -f src/shellll.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+TEST(SymbolicTestCommandTest, Test12){
+string input = "[ -d src/shellll.cpp ]";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("(FALSE)\n", output);
+}
+
+
+
+
 
 //extensive Exit testing will be done in integration because the exit here exits the google test stopping multiple exit functions
 //
