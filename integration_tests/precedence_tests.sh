@@ -19,9 +19,9 @@ echo hi && ls # (echo hi && echo "world")
 (dog && (echo 3 && echo 5))
 (echo hello && echo hi
 echo "(hello there)" && (echo 2 && echo 4)
-(exit && echo 1) && echo 2;
-(exit && echo 1) || echo 2;
-(exit && echo 1) ; echo 2;
+(exit && echo 1) && echo 2
+(exit && echo 1) || echo 2
+(exit && echo 1) ; echo 2
 echo 1 && (exit && echo 2 && echo 3) && echo 4
 echo 1 ; (echo 2 ; exit || echo 3) && echo 5
 echo 1 ; (echo 3 && echo 4 ; exit) || echo 6
