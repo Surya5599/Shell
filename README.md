@@ -17,6 +17,7 @@ Class: SingleCommand: This class stores the user input as a member variable: str
 
 Class Multiple Commands: This class is called when there is a connector in a string, that means this is a multipleCommand; multiple Command's Parse() function does the same thing for # first then continues on to create objects of singleCommand by parsing each command based on connectors and pushes them into private member variable multCommand which hold reference to the Command the abstract base class. This class also has private memeber variable of strings which holds the connectors in the order they are inputted. Once the runCommand for this class is called. This class runs calls runCommand on every singleCommand object based on the connectors.
 
+Class Parenthesis Commands: This class creates an object for a parenthesis command which in turn works like multiple command but the parenthesis create a sort of precedence that this class accounts for in order to run the commands. It does so but creating objects of single commands and multiple commands in order to run the precedence. 
 
 ## Prototypes/Research
 ```c++
@@ -74,15 +75,19 @@ SingleCommand. (Parse(), findQuotes(int) , runCommand())
 
 MultipleCommand (Parse(), findQuotes(int) , runCommand())
 
-Unit_test.cpp: create extensive testing for singleCommands, MultipleCommands, CommentedCommands, ExitCommands
+ParenthesisCommand(Parse(), runCommand())
+Unit_test.cpp: create extensive testing for singleCommands, MultipleCommands, CommentedCommands, ExitCommands, PrecedenceCommands, TestCommands, SymbolicTestCommands.
 singleCommands testing: Includes testing of basic commands such as echo, ls , mkdir, and even an invalid command
 multipleCommand testing: Includes testing of connectors and how they work together and sometimes not work together.
 CommentedCommands testing: Includes testing what happens to commands that have comments in middle, beginning or end
 Exit Commands: testing on exit is hard for google test as, once exit is called it exits the googletest therefore, not continuing with any testing after so much more exit testing will be done in bash integration testing
+PrecedenceCommands: Includes testing of basic commands mentioned above but this time with precedence and tests if the code can handle these commands
+TestCommands and Symbolic Commands: This is its own testing command which returns true or false based on if a path exists that the user is trying to see.
+
 
 ./test will run the unit_tests....if the failing tests are being due to ls, that probably because of an extra directory being created please disregard those errors.
 
-Integration tests include many edge cases for single, multiple, commented, and exit commands. 
+Integration tests include many edge cases for single, multiple, commented,exit commands, precedence, testcommands, and symbolictests.
 
 Division: //Updated
 
