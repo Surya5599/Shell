@@ -4,11 +4,14 @@
 cd ..
 
 ./rshell << EOF
-cat < inputfile
-cat < inputfile && echo A
-cat < inputfile > outputfile
-cat < inputfile >> outputfile
-cat < nofile || echo file doesn't exist
-cat < inputfile && cat < inputfile2
+cat < integration_tests/inputfile
+cat < integration_tests/inputfile && echo A
+cat < integration_tests/inputfile > integration_tests/outputfile
+echo "OUTPUTFILE " && cat < integration_tests/outputfile
+cat < integration_tests/inputfile >> integration_tests/outputfile
+echo "OUTPUTFILE " && cat < integration_tests/outputfile
+cat < integration_tests/nofile || echo file doesn't exist
+cat < integration_tests/inputfile && cat < integration_tests/inputfile2
+rm integration_tests/outputfile
 exit
 EOF

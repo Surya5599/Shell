@@ -16,7 +16,7 @@ ADD_EXECUTABLE(rshell
      ${PROJECT_SOURCE_DIR}/src/singleCommand.cpp
      ${PROJECT_SOURCE_DIR}/src/multipleCommand.cpp
      ${PROJECT_SOURCE_DIR}/src/pareCommands.cpp
-     ${PROJECT_SOURCE_DIR}/src/symbols.cpp
+     ${PROJECT_SOURCE_DIR}/src/Symbols.cpp
 )
 
 
@@ -26,7 +26,7 @@ ADD_EXECUTABLE(test
    ${PROJECT_SOURCE_DIR}/src/singleCommand.cpp
      ${PROJECT_SOURCE_DIR}/src/multipleCommand.cpp
 	${PROJECT_SOURCE_DIR}/src/pareCommands.cpp
-	${PROJECT_SOURCE_DIR}/src/symbols.cpp
+	${PROJECT_SOURCE_DIR}/src/Symbols.cpp
 
 )
 TARGET_LINK_LIBRARIES(test gtest)

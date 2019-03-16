@@ -3,7 +3,7 @@
 #include "singleCommand.h"
 #include "multipleCommand.h"
 #include "pareCommands.h"
-#include "symbols.h"
+#include "Symbols.h"
 using namespace std;
 
 TEST(SingleCommandTest, ECHO){   
@@ -563,7 +563,7 @@ string input = "[ -d src/shellll.cpp ]";
     EXPECT_EQ("(FALSE)\n", output);
 }
 
-TEST(SymbolicTestCommandTest, Test12){
+TEST(SymbolicTestCommandTest, Test13){
     string input = "cat < integration_tests/inputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
