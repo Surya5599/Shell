@@ -3,6 +3,7 @@
 #include "singleCommand.h"
 #include "multipleCommand.h"
 #include "pareCommands.h"
+#include "symbols.h"
 using namespace std;
 
 TEST(SingleCommandTest, ECHO){   
