@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Command.h"
-#include "singleCommand.cpp"
-#include "multipleCommand.cpp"
-#include "pareCommands.cpp"
-#include "Symbols.cpp"
+#include "singleCommand.h"
+#include "multipleCommand.h"
+#include "pareCommands.h"
+#include "Symbols.h"
 
 using namespace std;
 
