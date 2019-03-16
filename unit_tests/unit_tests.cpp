@@ -16,39 +16,16 @@ TEST(SingleCommandTest, ECHO){
 
 TEST(SingleCommandTest, LS){
     
-    singleCommand* s2 = new singleCommand("ls");
+    singleCommand* s2 = new singleCommand("echo A");
     s2->Parse();
     testing::internal::CaptureStdout();
     s2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "A";
     EXPECT_EQ(expectedOutput, output);
 
 }
 
-
-TEST(SingleCommandTest, MKDIRandRM){
-    
-    singleCommand* s3 = new singleCommand("mkdir new");
-    s3->Parse();
-    s3->runCommand();
-    singleCommand* s2 = new singleCommand("ls");
-    s2->Parse();
-    testing::internal::CaptureStdout();
-    s2->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nnew\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
-    EXPECT_EQ(expectedOutput, output);
-    singleCommand* s4 = new singleCommand("rm -rf new");
-    s4->Parse();
-    s4->runCommand();
-    testing::internal::CaptureStdout();
-    s2->runCommand();
-    string output2 = testing::internal::GetCapturedStdout();
-    string expectedOutput2 = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
-    EXPECT_EQ(expectedOutput2, output2);
-
-}
 
 
 TEST(SingleCommandTest, WrongCommand){
@@ -75,21 +52,18 @@ TEST(MultipleCommandTest, Mixed1) {
 
 TEST(MultipleCommandTest, Mixed2) {
     
-    multipleCommand* m2 = new multipleCommand("ls -a; echo hello; mkdir newDir; ls");
+    multipleCommand* m2 = new multipleCommand("echo A; echo hello; echo B; echo C");
     m2->Parse();
      testing::internal::CaptureStdout();
     m2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = ".\n..\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\n.git\n.gitignore\n.gitmodules\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\nhello\nbin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nnewDir\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
-    EXPECT_EQ(expectedOutput, output);
-    multipleCommand* m6 = new multipleCommand("rm -rf newDir");
-    m6->Parse();
-    m6->runCommand();    
+    string expectedOutput = "A\nhello\nB\nC\n";
+    EXPECT_EQ(expectedOutput, output);   
 }
 
 TEST(MultipleCommandTest, Mixed3) {
     
-    multipleCommand* m3 = new multipleCommand("echo hello || ls -1 ; echo hi || echo world || git status");
+    multipleCommand* m3 = new multipleCommand("echo hello || echo B ; echo hi || echo world || echo C");
     m3->Parse();
     testing::internal::CaptureStdout();
     m3->runCommand();
@@ -122,12 +96,12 @@ TEST(CommentedCommandTest, Comment1){
 
 
 TEST(CommentedCommandTest, Comment2){
-    singleCommand* s1 = new singleCommand("ls # -a");
+    singleCommand* s1 = new singleCommand("echo A # B");
     s1->Parse();
     testing::internal::CaptureStdout();
     s1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "bin\nCMakeCache.txt\nCMakeFiles\ncmake_install.cmake\nCMakeLists.txt\ngoogletest\nimages\nintegration_tests\nlib\nMakefile\nnames.txt\nREADME.md\nrshell\nsrc\ntest\nunit_tests\n";
+    string expectedOutput = "A\n";
     EXPECT_EQ(output, expectedOutput);
 }
 
@@ -588,8 +562,196 @@ string input = "[ -d src/shellll.cpp ]";
     EXPECT_EQ("(FALSE)\n", output);
 }
 
+TEST(SymbolicTestCommandTest, Test12){
+    string input = "cat < integration_tests/inputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test1){
+    string input = "cat < integration_tests/inputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test2){
+    string input = "cat < integration_tests/inputfile > integration_tests/outputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test3){
+    string input = "cat < integration_tests/inputfile2 >> integration_tests/outputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test4){
+    string input = "cat < integration_tests/inputfile && echo A";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test5){
+    string input = "cat < integration_tests/inputfile || echo A";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test6){
+    string input = "cat < integration_tests/inputfile ; echo A";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+TEST(InputRed, Test7){
+    string input = "cat < integration_tests/inputfile && cat < integration_tests/inputfile2";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(InputRed, Test8){
+    string input = "cat < integration_tests/inputfile || cat < integration_tests/inputfile2";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(OutputRed, Test1){
+    singleCommand* s1 = new singleCommand("rm outputfile");
+    s1->Parse();
+    s1->runCommand();
+    string input = "echo A > outputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(OutputRed, Test2){
+    string input = "echo B >> outputfile";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
 
 
+TEST(OutputRed, Test4){
+    string input = "echo C > outputfile && echo D >> outputfile";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(OutputRed, Test5){
+    string input = "echo F > outputfile || echo A";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+
+TEST(OutputRed, Test6){
+    string input = "echo A > outputfile ; echo B > outputfile";
+    multipleCommand* m1 = new multipleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("", output);
+}
+TEST(Pipe, Test1){
+    string input = "echo A B c D e F g | tr a-z A-Z";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("A B C D E F G\n", output);
+}
+TEST(Pipe, Test2){
+    string input = "echo A B c D e F g | tr A-Z a-z";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("a b c d e f g\n", output);
+}
+
+TEST(Pipe, Test3){
+    string input = "cat < inputfile | tr A-Z a-z";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("a b c d e f g\n", output);
+}
+
+TEST(Pipe, Test4){
+    string input = "cat < inputfile | tr A-Z a-z | sort";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("a b c d e f g\n", output);
+}
+
+TEST(Pipe, Test5){
+    string input = "cat < inputfile | tr A-Z a-z | sort > output";
+    singleCommand* m1 = new singleCommand(input);
+    m1->Parse();
+    testing::internal::CaptureStdout();
+    m1->runCommand();
+    string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ("a b c d e f g\n", output);
+}
 
 
 //extensive Exit testing will be done in integration because the exit here exits the google test stopping multiple exit functions
