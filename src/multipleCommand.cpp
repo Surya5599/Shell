@@ -1,8 +1,5 @@
 #include "multipleCommand.h"
-#include <bits/stdc++.h> 
-#include <cstdlib>
-#include <stdio.h>
-#include <stdlib.h>
+
 using namespace std;
 
     multipleCommand::multipleCommand(string data) {

@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Command.h"
-#include "singleCommand.h"
-#include "multipleCommand.h"
-#include "pareCommands.h"
+#include "singleCommand.cpp"
+#include "multipleCommand.cpp"
+#include "pareCommands.cpp"
+#include "Symbols.cpp"
 
 using namespace std;
 
@@ -56,7 +57,7 @@ bool checkIfSingle(string data){
                     secPos = j;
                     break;
                 }
-        }
+        } 
         for(unsigned i = 0; i < data.size(); ++i) {
                 if(data[i] == ';'){
                     conPos = i;

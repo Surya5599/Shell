@@ -1,13 +1,11 @@
 #include "singleCommand.h"
-#include <bits/stdc++.h> 
-#include <cstdlib>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 using namespace std;
 
     singleCommand::singleCommand(string data){
         this->data = data;
+        this->exists = false;
     }
     void singleCommand::Parse(){
         int paren = -1;
@@ -30,6 +28,7 @@ using namespace std;
                 data.erase(data.begin()+hash, data.end());
             }
         }
+        checkSymbols();
         if(data == " "){
 	        data.erase(data.begin(), data.end());
 	    }
@@ -50,63 +49,65 @@ using namespace std;
 	    if(commands.at(0) == "exit"){
                 exit(0);
         }
-        char *cmd = &commands.at(0)[0];
-        char *argv[commands.size() + 1];
-        for(unsigned i = 0; i < commands.size(); ++i){
-            argv[i] = &commands.at(i)[0];
-        }
-        argv[commands.size()] = NULL;
-        if(commands.at(0) == "test" || commands.at(0) == "["){
-            char flag = checkFlag(argv[1]);
-            int testAnswer = 0;
-            if(flag == 'n'){
-                testAnswer = runTest(flag, argv[1]);
-            }
-            else{
-                testAnswer = runTest(flag, argv[2]);
-            }
-            if(testAnswer == 1){
-                cout << "(TRUE)" << endl;
-                return true;
-            }
-            else{
-                cout << "(FALSE)" << endl;
-                return false;
-            }
+        if(exists == true){
+            Symbols* s1 = new Symbols(commands);
+            s1->Parse();
+            return s1->runCommand();
         }
         else{
-            pid_t pid = fork();
-            if (pid == -1)
-            {
-                perror("Fork Error");
-            }   
-            else if (pid > 0)
-            {
-                int status;
-                waitpid(pid, &status, 0);
-                if(status == -1){
-                    lastRun = false;
-                    return false;
+            char *cmd = &commands.at(0)[0];
+            char *argv[commands.size() + 1];
+            for(unsigned i = 0; i < commands.size(); ++i){
+                argv[i] = &commands.at(i)[0];
+            }
+            argv[commands.size()] = NULL;
+            if(commands.at(0) == "test" || commands.at(0) == "["){
+                char flag = checkFlag(argv[1]);
+                int testAnswer = 0;
+                if(flag == 'n'){
+                    testAnswer = runTest(flag, argv[1]);
                 }
-                if(status == 0){
-                    lastRun = false;
+                else{
+                    testAnswer = runTest(flag, argv[2]);
+                }
+                if(testAnswer == 1){
+                    cout << "(TRUE)" << endl;
                     return true;
                 }
-            }  
-            else
-            {
-                if(-1 == execvp(cmd, argv)){
-                    perror("Command not found");
-                    _exit(-1);
+                else{
+                    cout << "(FALSE)" << endl;
+                    return false;
                 }
-                _exit(0);
             }
-           }
+            else{
+                pid_t pid = fork();
+                if (pid == -1) {
+                    perror("Fork Error");
+                }   
+                else if (pid > 0) {
+                    int status;
+                    waitpid(pid, &status, 0);
+                    if(status > 0){
+                        lastRun = false;
+                        return false;
+                    }
+                    if(status == 0){
+                        lastRun = false;
+                        return true;
+                    }
+                }  
+                else {
+                    if(-1 == execvp(cmd, argv)) {
+                        perror("Command not found");
+                        _exit(-1);
+                    }
+                    _exit(0);
+                }
+               }
+            }
         }
         return lastRun;
     }
-    
-    
 
     bool singleCommand::findQuotes(int loc){
         int firstPos = -1;
@@ -140,6 +141,7 @@ using namespace std;
             }
         return 'n';
     }
+    
     int singleCommand::runTest(char flag, char* path){
         if(flag == 'e' || flag == 'n'){
             struct stat path_stat;
@@ -167,3 +169,35 @@ using namespace std;
         }
         return 0;
     }
+
+    void singleCommand::checkSymbols(){
+        int less = -1;
+        less = data.find('<');
+        if(less != -1){
+            if(findQuotes(less) == false){
+                exists = true;
+            }
+        }
+        int great = -1;
+        great = data.find('>');
+        if(great != -1){
+            if(findQuotes(great) == false){
+                exists = true;
+            }
+        }
+        int greater = -1;
+        greater = data.find(">>");
+        if(greater != -1){
+            if(findQuotes(greater) == false){
+                exists = true;
+            }
+        }
+        int pipe = -1;
+        pipe = data.find('|');
+        if(pipe != -1){
+            if(findQuotes(pipe) == false){
+                exists = true;
+            }
+        }
+    }
+    
