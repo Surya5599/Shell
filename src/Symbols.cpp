@@ -57,6 +57,11 @@ bool Symbols::runCommand() {
                                 flags.push_back("inputoutput");
                                 files2.push_back(commands.at(k + 1));
                             }
+                            else if(commands.at(k) == "<"){
+                                flags.push_back("input");
+                                files.pop_back();
+                                files.push_back(commands.at(k+1));
+                            }
                         }
                     }
                     else{
@@ -120,7 +125,7 @@ bool Symbols::execute(){
             string inputfile = files.at(i);
             in = open(inputfile.c_str(), O_RDONLY, S_IRWXU);
             string outputfile = files2.at(i);
-            out = open(outputfile.c_str(), O_RDWR | O_CREAT | O_APPEND, S_IRWXU);
+            out = open(outputfile.c_str(), O_RDWR | O_CREAT | O_APPEND , S_IRWXU);
             inputlist[i] = in;
             outputlist[i] = out;
         }
