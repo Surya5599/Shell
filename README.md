@@ -19,7 +19,7 @@ Class: Multiple Commands: This class is called when there is a connector in a st
 
 Class: Parenthesis Commands: This class creates an object for a parenthesis command which in turn works like multiple command but the parenthesis create a sort of precedence that this class accounts for in order to run the commands. It does so but creating objects of single commands and multiple commands in order to run the precedence. 
 
-Class: Symbols Commands: This class extends our rshell program so that it properly handles input redirection <, output redirection > and >>, and piping |. To do so, we utilized the functions dup(), dup2(), and pipe(). while using these we used a file decriptor so that we can read and/or write into existing files. If the files do not exits, we make sure to handle the case properly by either creating a new file or sending an error message. We also send error messages for invalid commands, as well as setiing flags in every command so that we know what symbols we need to operate with.
+Class: Symbols Commands: This class extends our rshell program so that it properly handles input redirection <, output redirection > and >>, and piping |. To do so, we utilized the functions dup(), dup2(), and pipe(). To use these functions we created a file decriptor so that we can read and/or write into existing files. If the files do not exits, we make sure to handle the case properly by either creating a new file or sending an error message. We also send error messages for invalid commands, as well as setiing flags in every command so that we know what symbols we need to operate with.
 
 ## Prototypes/Research
 ```c++
