@@ -6,7 +6,7 @@
 #include "Symbols.h"
 using namespace std;
 
-TEST(SingleCommandTest, ECHO){   
+TEST(SingleCommandTest, Test1){   
     singleCommand* s1 = new singleCommand("echo love cs");
     s1->Parse();
     testing::internal::CaptureStdout();
@@ -15,14 +15,14 @@ TEST(SingleCommandTest, ECHO){
     EXPECT_EQ("love cs\n", output);
 }
 
-TEST(SingleCommandTest, LS){
+TEST(SingleCommandTest, Test2){
     
     singleCommand* s2 = new singleCommand("echo A");
     s2->Parse();
     testing::internal::CaptureStdout();
     s2->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    string expectedOutput = "A";
+    string expectedOutput = "A\n";
     EXPECT_EQ(expectedOutput, output);
 
 }
@@ -563,16 +563,6 @@ string input = "[ -d src/shellll.cpp ]";
     EXPECT_EQ("(FALSE)\n", output);
 }
 
-TEST(SymbolicTestCommandTest, Test13){
-    string input = "cat < integration_tests/inputfile";
-    singleCommand* m1 = new singleCommand(input);
-    m1->Parse();
-    testing::internal::CaptureStdout();
-    m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
-}
-
 TEST(InputRed, Test1){
     string input = "cat < integration_tests/inputfile";
     singleCommand* m1 = new singleCommand(input);
@@ -580,17 +570,15 @@ TEST(InputRed, Test1){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\n", output);
 }
 
 TEST(InputRed, Test2){
     string input = "cat < integration_tests/inputfile > integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    
 }
 
 TEST(InputRed, Test3){
@@ -610,7 +598,7 @@ TEST(InputRed, Test4){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\nA\n", output);
 }
 
 TEST(InputRed, Test5){
@@ -620,7 +608,7 @@ TEST(InputRed, Test5){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\n", output);
 }
 
 TEST(InputRed, Test6){
@@ -630,7 +618,7 @@ TEST(InputRed, Test6){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\nA\n", output);
 }
 TEST(InputRed, Test7){
     string input = "cat < integration_tests/inputfile && cat < integration_tests/inputfile2";
@@ -639,7 +627,7 @@ TEST(InputRed, Test7){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\nb\nd\np\nz\ns\nd\nf\ng\nj\nk\n\n", output);
 }
 
 TEST(InputRed, Test8){
@@ -649,14 +637,11 @@ TEST(InputRed, Test8){
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    EXPECT_EQ("A\nD\nE\nG\nP\nZ\nS\nH\nK\n\n", output);
 }
 
 TEST(OutputRed, Test1){
-    singleCommand* s1 = new singleCommand("rm outputfile");
-    s1->Parse();
-    s1->runCommand();
-    string input = "echo A > outputfile";
+    string input = "echo A > integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
@@ -666,7 +651,7 @@ TEST(OutputRed, Test1){
 }
 
 TEST(OutputRed, Test2){
-    string input = "echo B >> outputfile";
+    string input = "echo B >> integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
@@ -677,7 +662,7 @@ TEST(OutputRed, Test2){
 
 
 TEST(OutputRed, Test4){
-    string input = "echo C > outputfile && echo D >> outputfile";
+    string input = "echo C > integration_tests/outputfile && echo D >> integration_tests/outputfile";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
@@ -687,7 +672,7 @@ TEST(OutputRed, Test4){
 }
 
 TEST(OutputRed, Test5){
-    string input = "echo F > outputfile || echo A";
+    string input = "echo F > integration_tests/outputfile || echo A";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
@@ -697,7 +682,7 @@ TEST(OutputRed, Test5){
 }
 
 TEST(OutputRed, Test6){
-    string input = "echo A > outputfile ; echo B > outputfile";
+    string input = "echo A > integration_tests/outputfile ; echo B > integration_tests/outputfile";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
@@ -725,33 +710,34 @@ TEST(Pipe, Test2){
 }
 
 TEST(Pipe, Test3){
-    string input = "cat < inputfile | tr A-Z a-z";
+    string input = "cat < integration_tests/inputfile | tr A-Z a-z";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("a b c d e f g\n", output);
+    EXPECT_EQ("a\nd\ne\ng\np\nz\ns\nh\nk\n\n", output);
 }
 
 TEST(Pipe, Test4){
-    string input = "cat < inputfile | tr A-Z a-z | sort";
+    string input = "cat < integration_tests/inputfile | tr A-Z a-z | sort";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     testing::internal::CaptureStdout();
     m1->runCommand();
     string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("a b c d e f g\n", output);
+    EXPECT_EQ("\na\nd\ne\ng\nh\nk\np\ns\nz\n", output);
 }
 
 TEST(Pipe, Test5){
-    string input = "cat < inputfile | tr A-Z a-z | sort > output";
+    string input = "cat < integration_tests/inputfile | tr A-Z a-z | sort > integration_tests/output";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("a b c d e f g\n", output);
+    multipleCommand* mc1 = new multipleCommand("rm integration_tests/outputfile && rm integration_tests/output");
+    mc1->Parse();
+    mc1->runCommand();
+
 }
 
 
