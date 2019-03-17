@@ -19,7 +19,7 @@ Class: Multiple Commands: This class is called when there is a connector in a st
 
 Class: Parenthesis Commands: This class creates an object for a parenthesis command which in turn works like multiple command but the parenthesis create a sort of precedence that this class accounts for in order to run the commands. It does so but creating objects of single commands and multiple commands in order to run the precedence. 
 
-Class: Symbols Commands: 
+Class: Symbols Commands: This class extends our rshell program so that it properly handles input redirection <, output redirection > and >>, and piping |. To do so, we utilized the functions dup(), dup2(), and pipe(). while using these we used a file decriptor so that we can read and/or write into existing files. If the files do not exits, we make sure to handle the case properly by either creating a new file or sending an error message. We also send error messages for invalid commands, as well as setiing flags in every command so that we know what symbols we need to operate with.
 
 ## Prototypes/Research
 ```c++
@@ -65,6 +65,14 @@ int execvp(const char *file, char *const argv[]): this function takes in a const
 pid_t waitpid(pid_t pid, int *status, int options): this function takes in the inputs of the pid_t which is the code returned by fork, the status which is returned from the status of the child, the int options variable. The waitpid call is used in the parent processes, and it suspends the parent processes/execvp or rather keeps it in waiting mode,  until the child execvp is completed and executed.
 
 The prototype above includes the execution of three functions and runs the command "ls" which shows the files in the current folder, the prototye functions shows the use of wait in the parent process as the waitpid is used if the current pid is parent, which should wait for child process to execute and finish executing. Waitpid helps avoid child zombies and allow for destruction of the child process before parent can execute.
+
+pipe(): Has 2 parts. One part is for writing and another is used for reading. a[1] (an array called "a") is used for writing and a[0] for reading. After reading from pipe, program will show output on console. 
+
+dup(): The dup() system call creates a copy of a file descriptor. Uses the LOWEST-NUMBERED unused descriptor for the new descriptor. If copy is successfully created, then the original and copy file descriptors may be used interchangeably.
+
+dup2(): The dup2() system call is similar to dup(), but it uses the descriptor number SPECIFIED by the user.
+
+fd: Will contain the values: -1, 0, 1, 2. A -1 means: ERROR! FAILED!!. 0 means: read from stdin => read from fd 0 (Input from the keyboard). 1 means: write to stdout => write to fd 1 (Output to the console). 2 means: write to stderr => write to fd 2.
 
 ## Development and Testing RoadMap //UPDATED
 Order of design:
