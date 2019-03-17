@@ -4,6 +4,7 @@
 #include "multipleCommand.h"
 #include "pareCommands.h"
 #include "Symbols.h"
+#include "fstream"
 using namespace std;
 
 TEST(SingleCommandTest, Test1){   
@@ -578,17 +579,32 @@ TEST(InputRed, Test2){
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     m1->runCommand();
-    
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+	while(getline(outfile, line)){
+		output = output + line + "\n";
+	}
+   }
+   EXPECT_EQ(output, "A\nD\nE\nG\nP\nZ\nS\nH\nK\n\n");
 }
 
 TEST(InputRed, Test3){
     string input = "cat < integration_tests/inputfile2 >> integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "A\nD\nE\nG\nP\nZ\nS\nH\nK\n\nb\nd\np\nz\ns\nd\nf\ng\nj\nk\n\n");
+
 }
 
 TEST(InputRed, Test4){
@@ -644,20 +660,32 @@ TEST(OutputRed, Test1){
     string input = "echo A > integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "A\n");
 }
 
 TEST(OutputRed, Test2){
     string input = "echo B >> integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "A\nB\n");
 }
 
 
@@ -665,30 +693,49 @@ TEST(OutputRed, Test4){
     string input = "echo C > integration_tests/outputfile && echo D >> integration_tests/outputfile";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "C\nD\n");
 }
+
 
 TEST(OutputRed, Test5){
     string input = "echo F > integration_tests/outputfile || echo A";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "F\n");
 }
 
 TEST(OutputRed, Test6){
     string input = "echo A > integration_tests/outputfile ; echo B > integration_tests/outputfile";
     multipleCommand* m1 = new multipleCommand(input);
     m1->Parse();
-    testing::internal::CaptureStdout();
     m1->runCommand();
-    string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("", output);
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "B\n");
 }
 TEST(Pipe, Test1){
     string input = "echo A B c D e F g | tr a-z A-Z";
@@ -730,11 +777,20 @@ TEST(Pipe, Test4){
 }
 
 TEST(Pipe, Test5){
-    string input = "cat < integration_tests/inputfile | tr A-Z a-z | sort > integration_tests/output";
+    string input = "cat < integration_tests/inputfile | tr A-Z a-z | sort > integration_tests/outputfile";
     singleCommand* m1 = new singleCommand(input);
     m1->Parse();
     m1->runCommand();
-    multipleCommand* mc1 = new multipleCommand("rm integration_tests/outputfile && rm integration_tests/output");
+    string line;
+    string output;
+    ifstream outfile("integration_tests/outputfile");
+    if(outfile.is_open()){
+        while(getline(outfile, line)){
+                output = output + line + "\n";
+        }
+   }
+   EXPECT_EQ(output, "\na\nd\ne\ng\nh\nk\np\ns\nz\n");
+    multipleCommand* mc1 = new multipleCommand("rm integration_tests/outputfile");
     mc1->Parse();
     mc1->runCommand();
 
